@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbinventarioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="dbinventarioModelStoreContainer">
+    <EntitySet Name="Categoria" EntityType="dbinventarioModel.Store.Categoria" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Producto" EntityType="dbinventarioModel.Store.Producto" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Productos_Categorias" Association="dbinventarioModel.Store.FK_Productos_Categorias">
+      <End Role="Categorias" EntitySet="Categoria" />
+      <End Role="Productos" EntitySet="Producto" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Categoria">
+    <Key>
+      <PropertyRef Name="idCategoria" />
+    </Key>
+    <Property Name="idCategoria" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="descripcion" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="esActivo" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Producto">
+    <Key>
+      <PropertyRef Name="idProducto" />
+    </Key>
+    <Property Name="idProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="descripcion" Type="varchar(max)" Nullable="false" />
+    <Property Name="cantidad" Type="int" Nullable="false" />
+    <Property Name="marca" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="fechaCreacion" Type="datetime" Nullable="false" />
+    <Property Name="idCategoria" Type="int" Nullable="false" />
+    <Property Name="esActivo" Type="bit" Nullable="false" />
+    <Property Name="UnidadMedida" Type="nvarchar" Nullable="false" MaxLength="15" />
+  </EntityType>
+  <Association Name="FK_Productos_Categorias">
+    <End Role="Categorias" Type="dbinventarioModel.Store.Categoria" Multiplicity="1" />
+    <End Role="Productos" Type="dbinventarioModel.Store.Producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categorias">
+        <PropertyRef Name="idCategoria" />
+      </Principal>
+      <Dependent Role="Productos">
+        <PropertyRef Name="idCategoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbinventarioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Categorias">
+          <Key>
+            <PropertyRef Name="idCategoria" />
+          </Key>
+          <Property Name="idCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="esActivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Productos" Relationship="Self.FK_Productos_Categorias" FromRole="Categorias" ToRole="Productos" />
+        </EntityType>
+        <EntityType Name="Productos">
+          <Key>
+            <PropertyRef Name="idProducto" />
+          </Key>
+          <Property Name="idProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="cantidad" Type="Int32" Nullable="false" />
+          <Property Name="marca" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idCategoria" Type="Int32" Nullable="false" />
+          <Property Name="esActivo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Categorias" Relationship="Self.FK_Productos_Categorias" FromRole="Productos" ToRole="Categorias" />
+          <Property Name="UnidadMedida" Type="String" Nullable="false" MaxLength="15" />
+        </EntityType>
+        <Association Name="FK_Productos_Categorias">
+          <End Role="Categorias" Type="Self.Categorias" Multiplicity="1" />
+          <End Role="Productos" Type="Self.Productos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categorias">
+              <PropertyRef Name="idCategoria" />
+            </Principal>
+            <Dependent Role="Productos">
+              <PropertyRef Name="idCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbinventarioEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categoria" EntityType="Self.Categorias" />
+          <EntitySet Name="Producto" EntityType="Self.Productos" />
+          <AssociationSet Name="FK_Productos_Categorias" Association="Self.FK_Productos_Categorias">
+            <End Role="Categorias" EntitySet="Categoria" />
+            <End Role="Productos" EntitySet="Producto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="dbinventarioModelStoreContainer" CdmEntityContainer="dbinventarioEntities">
+    <EntitySetMapping Name="Categoria">
+      <EntityTypeMapping TypeName="IsTypeOf(dbinventarioModel.Categorias)">
+        <MappingFragment StoreEntitySet="Categoria">
+          <ScalarProperty Name="idCategoria" ColumnName="idCategoria" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="esActivo" ColumnName="esActivo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Producto">
+      <EntityTypeMapping TypeName="IsTypeOf(dbinventarioModel.Productos)">
+        <MappingFragment StoreEntitySet="Producto">
+          <ScalarProperty Name="idProducto" ColumnName="idProducto" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+          <ScalarProperty Name="marca" ColumnName="marca" />
+          <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+          <ScalarProperty Name="idCategoria" ColumnName="idCategoria" />
+          <ScalarProperty Name="esActivo" ColumnName="esActivo" />
+          <ScalarProperty Name="UnidadMedida" ColumnName="UnidadMedida" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
