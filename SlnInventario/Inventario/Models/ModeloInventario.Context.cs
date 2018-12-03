@@ -12,6 +12,8 @@ namespace Inventario.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class dbinventarioEntities : DbContext
     {
@@ -27,5 +29,14 @@ namespace Inventario.Models
     
         public virtual DbSet<Categorias> Categoria { get; set; }
         public virtual DbSet<Productos> Producto { get; set; }
+    
+        public virtual int ObtenerCategorias(Nullable<bool> soloActivo)
+        {
+            var soloActivoParameter = soloActivo.HasValue ?
+                new ObjectParameter("SoloActivo", soloActivo) :
+                new ObjectParameter("SoloActivo", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ObtenerCategorias", soloActivoParameter);
+        }
     }
 }
